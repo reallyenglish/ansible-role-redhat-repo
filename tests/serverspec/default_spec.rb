@@ -12,18 +12,6 @@ packages.each do |p|
   end
 end
 
-## installed?
-#describe command('yum repolist all') do
-#  its(:stdout) { should match(/^#{ repo_name }/) }
-#  its(:exit_status) { should eq 0 }
-#end
-#
-# enabled?
-describe command('yum repolist enabled') do
-  its(:stdout) { should match(/^#{ repo_name }/) }
-  its(:exit_status) { should eq 0 }
-end
-
 describe file("/etc/yum.repos.d/#{ repo_name }.repo") do
   it { should be_file }
   its(:content) { should match(/^\[#{ repo_name }\]\nenabled = 1\ngpgcheck = 1\nmirrorlist = #{ Regexp.escape('http://mirrors.fedoraproject.org/mirrorlist?repo=epel-7&arch=x86_64') }/) }
