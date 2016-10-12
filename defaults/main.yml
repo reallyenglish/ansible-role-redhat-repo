@@ -1,0 +1,8 @@
+redhat_repo_user: redhat_repo
+redhat_repo_group: redhat_repo
+redhat_repo_log_dir: /var/log/redhat_repo
+redhat_repo_db_dir: "{{ __redhat_repo_db_dir }}"
+redhat_repo_service: redhat_repo
+redhat_repo_conf_dir: "{{ __redhat_repo_conf_dir }}"
+redhat_repo_conf_file: "{{ __redhat_repo_conf_dir }}/redhat_repo.conf"
+redhat_repo_flags: ""

@@ -1,0 +1,6 @@
+---
+
+- name: Install redhat_repo
+  pkgng:
+    name: redhat_repo
+    state: present

@@ -1,0 +1,2 @@
+__redhat_repo_db_dir: /var/db/redhat_repo
+__redhat_repo_conf_dir: /usr/local/etc/redhat_repo

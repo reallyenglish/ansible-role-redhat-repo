@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - ansible-role-redhat_repo
+  vars:
+    redhat_repo_config: ""
