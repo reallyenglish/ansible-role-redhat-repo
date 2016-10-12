@@ -20,8 +20,8 @@ galaxy_info:
     versions:
       - 7
 
-#  galaxy_tags:
-#    - acme
+  galaxy_tags:
+    - yum
 #    - installer
 #    - web
 dependencies:
