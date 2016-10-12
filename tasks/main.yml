@@ -1,36 +1,15 @@
 ---
 # tasks file for ansible-role-redhat_repo
 
-- include_vars: "{{ ansible_os_family }}.yml"
+- name: Install extra packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ redhat_repo_extra_packages }}"
 
-- include: "install-{{ ansible_os_family }}.yml"
-
-- name: Create log directory
-  file:
-    path: "{{ redhat_repo_log_dir }}"
-    mode: 0755
-    owner: "{{ redhat_repo_user }}"
-    group: "{{ redhat_repo_group }}"
-    state: directory
-  notify: Restart redhat_repo
-
-- name: Create db directory
-  file:
-    path: "{{ redhat_repo_db_dir }}"
-    mode: 0755
-    owner: "{{ redhat_repo_user }}"
-    group: "{{ redhat_repo_group }}"
-    state: directory
-  notify: Restart redhat_repo
-
-- name: Create redhat_repo.conf
-  template:
-    src: redhat_repo.conf.j2
-    dest: "{{ redhat_repo_conf_file }}"
-  notify: Restart redhat_repo
-
-- name: Start redhat_repo
-  service:
-    name: "{{ redhat_repo_service }}"
-    enabled: true
-    state: started
+- name: Install repositories
+  yum_repository:
+    name: "{{ item.key }}"
+    description: "{% if 'description' in item.value %}{{ item.value.description }}{% else %}{{ item.key }} repository{% endif %}"
+    params: "{{ item.value }}"
+  with_dict: "{{ redhat_repo }}"

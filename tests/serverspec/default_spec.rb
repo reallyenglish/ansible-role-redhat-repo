@@ -1,58 +1,25 @@
 require 'spec_helper'
-require 'serverspec'
 
-package = 'redhat_repo'
-service = 'redhat_repo'
-config  = '/etc/redhat_repo/redhat_repo.conf'
-user    = 'redhat_repo'
-group   = 'redhat_repo'
-ports   = [ PORTS ]
-log_dir = '/var/log/redhat_repo'
-db_dir  = '/var/lib/redhat_repo'
+packages = %w[ epel-release ]
+repo_name = 'epel'
 
-case os[:family]
-when 'freebsd'
-  config = '/usr/local/etc/redhat_repo.conf'
-  db_dir = '/var/db/redhat_repo'
+packages.each do |p|
+  describe package(p) do
+    it { should be_installed }
+  end
 end
 
-describe package(package) do
-  it { should be_installed }
-end 
+# installed?
+describe command('yum repolist all') do
+  its(:stdout) { should match(/^#{ repo_name }/) }
+end
 
-describe file(config) do
+# enabled?
+describe command('yum repolist enabled') do
+  its(:stdout) { should match(/^#{ repo_name }/) }
+end
+
+describe file("/etc/yum.repos.d/#{ repo_name }.repo") do
   it { should be_file }
-  its(:content) { should match Regexp.escape('redhat_repo') }
-end
-
-describe file(log_dir) do
-  it { should exist }
-  it { should be_mode 755 }
-  it { should be_owned_by user }
-  it { should be_grouped_into group }
-end
-
-describe file(db_dir) do
-  it { should exist }
-  it { should be_mode 755 }
-  it { should be_owned_by user }
-  it { should be_grouped_into group }
-end
-
-case os[:family]
-when 'freebsd'
-  describe file('/etc/rc.conf.d/redhat_repo') do
-    it { should be_file }
-  end
-end
-
-describe service(service) do
-  it { should be_running }
-  it { should be_enabled }
-end
-
-ports.each do |p|
-  describe port(p) do
-    it { should be_listening }
-  end
+  its(:content) { should match(/^\[#{ repo_name }\]\nenabled = 1\ngpgcheck = 1\nmirrorlist = #{ Regexp.escape('http://mirrors.fedoraproject.org/mirrorlist?repo=epel-7&arch=x86_64') }/) }
 end
