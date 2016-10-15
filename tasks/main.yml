@@ -1,5 +1,5 @@
 ---
-# tasks file for ansible-role-redhat_repo
+# tasks file for ansible-role-redhat-repo
 
 - name: Install extra packages
   yum:
@@ -13,3 +13,7 @@
     description: "{% if 'description' in item.value %}{{ item.value.description }}{% else %}{{ item.key }} repository{% endif %}"
     params: "{{ item.value }}"
   with_dict: "{{ redhat_repo }}"
+  register: register_yum_command
+  retries: 3
+  delay: 10
+  until: "'failed' not in register_yum_command"

@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-role-redhat_repo
+    - ansible-role-redhat-repo
