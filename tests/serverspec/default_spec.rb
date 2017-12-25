@@ -1,10 +1,10 @@
 require "spec_helper"
 
-packages = %w(epel-release)
+packages = %w[epel-release]
 repo_name = "epel"
 
 # choose a package that is not included in the default repos
-package_not_in_default_repo = %w(python-pip)
+package_not_in_default_repo = %w[python-pip]
 
 packages.each do |p|
   describe package(p) do
